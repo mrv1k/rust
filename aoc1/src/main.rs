@@ -1,16 +1,21 @@
 fn main() {
     let crowd = input().split("\n\n");
+    let mut crowdpack: Vec<u32> = vec![];
 
-    let mut max = 0;
     for gnome in crowd {
         let gnomepack = gnome
             .split("\n")
-            .map(|calories| calories.parse::<u32>().unwrap_or(0));
-
-        let sum = gnomepack.reduce(|acc, cake| acc + cake).unwrap_or(0);
-        max = if sum > max { sum } else { max };
+            .map(|calories| calories.parse::<u32>().unwrap_or(0))
+            .sum();
+        crowdpack.push(gnomepack);
     }
-    println!("{}", max);
+    crowdpack.sort();
+
+    let part1 = crowdpack.last().unwrap();
+    println!("{:?}", part1);
+
+    let part2: u32 = crowdpack.iter().rev().take(3).sum();
+    println!("{:?}", part2);
 }
 
 fn input() -> &'static str {
