@@ -2,10 +2,16 @@ use std::{collections::HashMap, ops::Deref};
 
 fn main() {
     // std::env::set_var("RUST_BACKTRACE", "1");
-    // let stub = r#"A Y
-    //     B X
-    //     C Z"#;
-    // let bg = stub.split("\n").map(|s| s.trim());
+    let stub = r#"A Y
+        B X
+        C Z
+        A Z
+        B Z
+        C Z
+        A X
+        B X
+        C X"#;
+    let bg = stub.split("\n").map(|s| s.trim());
     let bg = input().split("\n");
 
     let score = HashMap::from([
@@ -24,13 +30,38 @@ fn main() {
     let mut strategy = 0;
 
     for pvp in bg {
-        let round: Vec<&i32> = pvp
-            .split_whitespace()
-            .map(|p| score.get(p).unwrap())
-            .collect();
+        let opponents = pvp.split_whitespace();
 
-        let you = round.first().unwrap().deref();
-        let me = round.last().unwrap().deref();
+        let round: Vec<&i32> = opponents.clone().map(|p| score.get(p).unwrap()).collect();
+        let you = *round.first().unwrap().deref();
+        // let me = round.last().unwrap().deref();
+
+        let how_to_end = opponents.last().unwrap();
+        let lose = how_to_end == "X";
+        let win = how_to_end == "Z";
+
+        print!("{:?}", round);
+        let me = if win {
+            // (you + 1) % 3
+            if you == 2 {
+                3
+            } else if you == 3 {
+                1
+            } else {
+                2
+            }
+        } else if lose {
+            if you == 2 {
+                1
+            } else if you == 3 {
+                2
+            } else {
+                3
+            }
+        } else {
+            you
+        };
+
         let result = you - me;
 
         let score = if result == 2 || result == -1 {
@@ -41,7 +72,10 @@ fn main() {
             me + draw
         };
         strategy += score;
-        println!("{:#?} {:#?} {:#?} {:#?}", you, me, result, score);
+        println!(
+            "you {:#?} | me {:#?} = result {:#?} | score {:#?}",
+            you, me, result, score
+        );
     }
 
     println!("{}", strategy);
