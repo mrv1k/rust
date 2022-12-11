@@ -9,13 +9,14 @@ fn main() {
     let reader = BufReader::new(file);
 
     let mut fully_contain_each_other = 0;
+    let mut any_overlap = 0;
 
     fn mek(n: Option<&&str>) -> Vec<u32> {
         n.unwrap()
             .split("-")
             .map(|n| n.parse::<u32>().unwrap_or(0))
             .collect()
-    };
+    }
 
     for gnome in reader.lines() {
         // gnome shape: "2-4,6-8"
@@ -34,13 +35,15 @@ fn main() {
 
         if (ax <= bx && ay >= by) || (ax >= bx && ay <= by) {
             fully_contain_each_other += 1;
-            // print!("a {:#?} v {:#?} | ", ax, ay);
-            // println!("b {:#?} v {:#?}", bx, by);
+            any_overlap += 1;
+        } else if (ax < bx && ay >= bx) || (bx < ax && by >= ax) {
+            any_overlap += 1;
         }
         // else {
-        //     println!("no {:#?}", pairs);
+        //     print!("a {:#?} v {:#?} | ", ax, ay);
+        //     println!("b {:#?} v {:#?}", bx, by);
         // }
     }
 
-    println!("Hello, world! {}", fully_contain_each_other);
+    println!("Hello, world! {} {}", fully_contain_each_other, any_overlap);
 }
