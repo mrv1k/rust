@@ -2,16 +2,16 @@ use std::{collections::HashMap, ops::Deref};
 
 fn main() {
     // std::env::set_var("RUST_BACKTRACE", "1");
-    let stub = r#"A Y
-        B X
-        C Z
-        A Z
-        B Z
-        C Z
-        A X
-        B X
-        C X"#;
-    let bg = stub.split("\n").map(|s| s.trim());
+    // let stub = r#"A Y
+    //     B X
+    //     C Z
+    //     A Z
+    //     B Z
+    //     C Z
+    //     A X
+    //     B X
+    //     C X"#;
+    // let bg = stub.split("\n").map(|s| s.trim());
     let bg = input().split("\n");
 
     let score = HashMap::from([
