@@ -5,31 +5,26 @@ use std::{
 
 fn main() {
     let path = "example.txt";
+
     let file = File::open(path).expect("to no js");
     let reader = BufReader::new(file);
 
     let mut stacks = String::new();
-
-    // let t = reader.lines();
-
-    // let cursor = std::io::Cursor::new(b"lorem\nipsum\r\ndolor");
-    // let mut lines_iter = cursor.lines().map(|l| l.unwrap());
-    // lines_iter.
-    // assert_eq!(lines_iter.next(), Some(String::from("lorem")));
+    let mut moves = false;
 
     for row in reader.lines() {
         let row = row.unwrap();
-        if row.is_empty() {
-            // println!("EMPTY");
-            break;
+
+        if moves {
+            println!("i like u move it move it: {:?}", row);
+        } else {
+            stacks += &row;
+            stacks += "\n";
         }
 
-        stacks += &row;
-        stacks += "\n";
-    }
-
-    for row in stacks.lines() {
-        println!("{}", row);
+        if row.is_empty() {
+            moves = true
+        }
     }
 
     println!("Hello, world! {}", "a");
