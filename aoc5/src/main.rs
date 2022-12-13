@@ -16,7 +16,30 @@ fn main() {
         let row = row.unwrap();
 
         if moves {
-            println!("i like u move it move it: {:?}", row);
+            let k = row.split_ascii_whitespace();
+
+            let mut amount = 0;
+            let mut from = 0;
+            let mut to = 0;
+
+            for o in k {
+                let int = o.parse::<u32>().unwrap_or(0);
+                if int != 0 {
+                    if amount == 0 {
+                        amount = int;
+                        continue;
+                    }
+                    if from == 0 {
+                        from = int;
+                        continue;
+                    }
+                    if to == 0 {
+                        to = int;
+                    }
+                }
+            }
+
+            println!("i like u move it move it: {:#?}{:?}{:?}", amount, from, to);
         } else {
             stacks += &row;
             stacks += "\n";
