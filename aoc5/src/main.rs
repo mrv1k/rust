@@ -4,7 +4,8 @@ use std::{
 };
 
 fn main() {
-    let path = "example.txt";
+    // let path = "example.txt";
+    let path = "input.txt";
 
     let file = File::open(path).expect("to no js");
     let reader = BufReader::new(file);
@@ -14,7 +15,7 @@ fn main() {
     let mut moves = false;
 
     for row in reader.lines() {
-        let row = row.unwrap();
+        let row = row.expect("to blow");
 
         if row.is_empty() {
             let mut lines = original_stacks.lines().rev();
@@ -43,36 +44,55 @@ fn main() {
             moves = true
         }
 
-        if moves {
+        if moves && !row.is_empty() {
             let k = row.split_ascii_whitespace();
-            println!("{:?}", row);
+            println!("row:{:?}", row);
 
             let mut amount = 0;
             let mut from = 0;
             let mut to = 0;
 
             for o in k {
-                let int = o.parse::<u32>().unwrap_or(0);
-                if int != 0 {
+                let u = o.parse::<usize>().unwrap_or(0);
+                if u != 0 {
                     if amount == 0 {
-                        amount = int;
+                        amount = u;
                         continue;
                     }
                     if from == 0 {
-                        from = int;
+                        from = u;
                         continue;
                     }
                     if to == 0 {
-                        to = int;
+                        to = u;
+                        break;
                     }
                 }
             }
-            println!("i like u move it move it: {:#?}{:?}{:?}", amount, from, to);
+
+            println!("before {:?} from {:?} to {:?}", amount, from, to);
+            println!("before {:?}", vec_stack);
+            for _ in 1..=amount {
+                let pop = &vec_stack[from - 1].pop().expect("anarchy");
+                let _ = &vec_stack[to - 1].push(*pop);
+            }
+
+            println!("after {:?}", vec_stack);
+            // println!(
+            //     "after {:?} from {:?} to {:?}",
+            //     amount, &vec_stack[from], &vec_stack[to],
+            // );
+            println!();
         } else {
             original_stacks += &row;
             original_stacks += "\n";
         }
     }
 
-    println!("Hello, world! {}", "a");
+    let mut end = String::new();
+    for stack in vec_stack {
+        let riot = stack.last().expect("riot");
+        end.push(*riot);
+    }
+    println!("Hello, world! {}", end);
 }
