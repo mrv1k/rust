@@ -10,35 +10,42 @@ fn main() {
     let reader = BufReader::new(file);
 
     let mut original_stacks = String::new();
-    let mut vec_stack: Vec<Vec<&str>> = vec![];
+    let mut vec_stack: Vec<Vec<char>> = vec![];
     let mut moves = false;
 
     for row in reader.lines() {
         let row = row.unwrap();
 
         if row.is_empty() {
-            let count = original_stacks.lines().count() - 1;
-            println!("{}", count);
+            let mut lines = original_stacks.lines().rev();
 
-            let everything = original_stacks.as_bytes();
-            let digit_row = original_stacks.lines().rev().next().expect("yolo");
-
-            for char_ind in digit_row.char_indices() {
-                // print!("{:?}", everything[char_ind.0] as char);
-                if char_ind.1.is_numeric() {
-                    let index = char_ind.0;
-                    let num = char_ind.1.to_digit(10).unwrap().to_be_bytes();
-                    print!("{:?}{:?} ", num, char_ind.1);
+            for char in lines.next().unwrap().chars() {
+                if char.is_numeric() {
+                    vec_stack.push(vec![]);
                 }
             }
-            println!("{:?}", digit_row);
 
-            // vec_stack
+            for stack in lines {
+                for char_ind in stack.char_indices() {
+                    let char = char_ind.1;
+
+                    if char.is_alphabetic() {
+                        let ind = char_ind.0 - 1;
+                        let vec_ind = if ind > 0 { ind / 4 } else { ind };
+                        vec_stack[vec_ind].push(char);
+                        // print!("{:?}", vec_ind);
+                    }
+                }
+                // println!();
+            }
+
+            println!("{:?}", vec_stack);
             moves = true
         }
 
         if moves {
             let k = row.split_ascii_whitespace();
+            println!("{:?}", row);
 
             let mut amount = 0;
             let mut from = 0;
@@ -60,7 +67,7 @@ fn main() {
                     }
                 }
             }
-            // println!("i like u move it move it: {:#?}{:?}{:?}", amount, from, to);
+            println!("i like u move it move it: {:#?}{:?}{:?}", amount, from, to);
         } else {
             original_stacks += &row;
             original_stacks += "\n";
