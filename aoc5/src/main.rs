@@ -9,11 +9,33 @@ fn main() {
     let file = File::open(path).expect("to no js");
     let reader = BufReader::new(file);
 
-    let mut stacks = String::new();
+    let mut original_stacks = String::new();
+    let mut vec_stack: Vec<Vec<&str>> = vec![];
     let mut moves = false;
 
     for row in reader.lines() {
         let row = row.unwrap();
+
+        if row.is_empty() {
+            let count = original_stacks.lines().count() - 1;
+            println!("{}", count);
+
+            let everything = original_stacks.as_bytes();
+            let digit_row = original_stacks.lines().rev().next().expect("yolo");
+
+            for char_ind in digit_row.char_indices() {
+                // print!("{:?}", everything[char_ind.0] as char);
+                if char_ind.1.is_numeric() {
+                    let index = char_ind.0;
+                    let num = char_ind.1.to_digit(10).unwrap().to_be_bytes();
+                    print!("{:?}{:?} ", num, char_ind.1);
+                }
+            }
+            println!("{:?}", digit_row);
+
+            // vec_stack
+            moves = true
+        }
 
         if moves {
             let k = row.split_ascii_whitespace();
@@ -38,15 +60,10 @@ fn main() {
                     }
                 }
             }
-
-            println!("i like u move it move it: {:#?}{:?}{:?}", amount, from, to);
+            // println!("i like u move it move it: {:#?}{:?}{:?}", amount, from, to);
         } else {
-            stacks += &row;
-            stacks += "\n";
-        }
-
-        if row.is_empty() {
-            moves = true
+            original_stacks += &row;
+            original_stacks += "\n";
         }
     }
 
