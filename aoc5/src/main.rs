@@ -46,7 +46,6 @@ fn main() {
 
         if moves && !row.is_empty() {
             let k = row.split_ascii_whitespace();
-            println!("row:{:?}", row);
 
             let mut amount = 0;
             let mut from = 0;
@@ -70,12 +69,16 @@ fn main() {
                 }
             }
 
-            println!("before {:?} from {:?} to {:?}", amount, from, to);
+            println!("amount {:?} from {:?} to {:?}", amount, from, to);
             println!("before {:?}", vec_stack);
+
+            let mut fml: Vec<char> = vec![];
             for _ in 1..=amount {
                 let pop = &vec_stack[from - 1].pop().expect("anarchy");
-                let _ = &vec_stack[to - 1].push(*pop);
+                let _ = fml.push(*pop);
             }
+            fml.reverse();
+            let _ = &vec_stack[to - 1].append(&mut fml);
 
             println!("after {:?}", vec_stack);
             // println!(
